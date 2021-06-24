@@ -168,6 +168,9 @@ class AdfsBaseBackend(ModelBackend):
         if settings.GROUPS_CLAIM is not None:
             # Update the user's group memberships
             django_groups = [group.name for group in user.groups.all()]
+            if settings.GROUPS_CLAIM_REGEX is not None:
+                import re
+                django_groups = filter(lambda name: re.match(settings.GROUPS_CLAIM_REGEX, name), django_groups)
 
             if settings.GROUPS_CLAIM in claims:
                 claim_groups = claims[settings.GROUPS_CLAIM]
